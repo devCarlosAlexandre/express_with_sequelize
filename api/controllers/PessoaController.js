@@ -174,6 +174,32 @@ class PessoaController {
         }
     }
 
+    static async restauraMatricula(req, res) {
+        const { estudanteId, matriculaId } = req.params;
+        try {
+            await database.Matriculas.restore({
+                where: {
+                    id: Number(matriculaId),
+                }
+            });
+            return res.status(200).json({ message: `id ${matriculaId} restaurado` });
+
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
+    static async pegaMatriculas(req, res) {
+        const { estudanteId } = req.params;
+        try {
+            const pessoa = await database.Pessoas.findOne({ where: { id: Number(estudanteId) } })
+            const matriculas = await pessoa.getAulasMatriculadas()
+            return res.status(200).json(matriculas);
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
 }
 
 module.exports = PessoaController;
