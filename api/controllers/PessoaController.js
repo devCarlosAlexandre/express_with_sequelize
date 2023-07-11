@@ -46,7 +46,7 @@ class PessoaController {
                 }
             });
             if (pessoa == 1) {
-                const novaPessoa = await database.Pessoas.findOne({ where: { id: id } });
+                const novaPessoa = await database.Pessoas.findOne({ where: { id: Number(id) } });
                 return res.status(200).json(novaPessoa);
             } else {
                 return res.status(401).json({ message: "não encontrado!" });
