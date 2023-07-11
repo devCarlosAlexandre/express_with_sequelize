@@ -67,6 +67,20 @@ class NivelController {
             return res.status(500).json(error.message);
         }
     }
+
+    static async restauraNiveis(req, res) {
+        const { id } = req.params;
+        try {
+            await dataBase.Niveis.restore({
+                where: {
+                    id: Number(id)
+                }
+            });
+            return res.status(200).json({ message: "Usuario restaurado com sucesso!" });
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
 }
 
 module.exports = NivelController;

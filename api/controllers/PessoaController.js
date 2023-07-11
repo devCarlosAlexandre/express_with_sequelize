@@ -64,8 +64,23 @@ class PessoaController {
                     id: Number(id)
                 }
             });
-            return res.status(204);
+            return res.status(200).json({ message: "Pessoa deletada com sucesso" });
 
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
+    static async restauraPessoa(req, res) {
+        const { id } = req.params;
+        try {
+            await database.Pessoas.restore({
+                where: {
+                    id: Number(id)
+                }
+            });
+
+            return res.status(200).json({ message: "Usuario restaurado com sucesso!" });
         } catch (error) {
             return res.status(500).json(error.message);
         }
