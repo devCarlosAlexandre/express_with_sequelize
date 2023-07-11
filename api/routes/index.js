@@ -1,7 +1,7 @@
 const bodyParse = require("body-parser");
-const PessoasController = require("../controllers/PessoaController.js")
+const pessoas = require("./pessoasRoutes");
 
 module.exports = app => {
     app.use(bodyParse.json());
-    app.get('/', (req, res) => PessoasController.pegaTodasPessoas(req, res));
+    app.use(pessoas);
 }   
