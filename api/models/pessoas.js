@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         ativo: true
       }
     },
+    scopes: {
+      todos: { where: {} },
+      // pode ser definido quantos mais escopos eu quiser e precisar {cosntrain: valor}
+    },
     modelName: 'Pessoas',
   });
   return Pessoas;
