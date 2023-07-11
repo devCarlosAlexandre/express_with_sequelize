@@ -45,7 +45,12 @@ class PessoaController {
                     id: Number(id)
                 }
             });
-            return res.status(200).json(pessoa);
+            if (pessoa == 1) {
+                const novaPessoa = await database.Pessoas.findOne({ where: { id: id } });
+                return res.status(200).json(novaPessoa);
+            } else {
+                return res.status(401).json({ message: "não encontrado!" });
+            }
         } catch (error) {
             return res.status(500).json(error.message);
         }
@@ -58,9 +63,9 @@ class PessoaController {
                 where: {
                     id: Number(id)
                 }
-            })
-            return res.status(204).json({ message: "Pessoa deletada com sucesso!" });
-            
+            });
+            return res.status(204);
+
         } catch (error) {
             return res.status(500).json(error.message);
         }
