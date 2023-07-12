@@ -1,9 +1,13 @@
-const database = require("../models");
+// const database = require("../models");
+// const Sequelize = require("sequelize");
+const { PessoasServices } = require("../services");
+const pessoasServices = new PessoasServices();
 
 class PessoaController {
     static async pegaTodasPessoasAtivas(req, res) {
         try {
-            const pessoasAtivas = await database.Pessoas.findAll();
+
+            const pessoasAtivas = await pessoasServices.pegaTodosRegistros();
             return res.status(200).json(pessoasAtivas);
         } catch (error) {
             return res.status(500).json(error.message);
@@ -210,6 +214,45 @@ class PessoaController {
                 }
             });
             return res.status(200).json(todasMastriculas)
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
+    static async pegaTurmasLotada(req, res) {
+        const maxTurma = 2;
+        try {
+            const turmasLotadas = await database.Matriculas.findAndCountAll({
+                where: {
+                    status: 'confirmado'
+                },
+                attributes: ['turma_id'],
+                group: ['turma_id'],
+                having: Sequelize.literal(`count(turma_id) >= ${maxTurma}`)
+            })
+            return res.status(200).json(turmasLotadas.count);
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
+    static async cancelaPessoa(req, res) {
+        const { estudanteId } = req.params;
+        try {
+            database.sequelize.transaction(async transacao => {
+                await database.Pessoas.update(
+                    { ativo: false },
+                    { where: { id: Number(estudanteId) } },
+                    { transaction: transacao });
+
+                await database.Matriculas.update(
+                    { status: 'cancelado' },
+                    { where: { estudante_id: Number(estudanteId) } },
+                    { transaction: transacao });
+
+                return res.status(200).json({ message: `Matricula referente estudante ${estudanteId} foram canceladas` });
+            });
+
         } catch (error) {
             return res.status(500).json(error.message);
         }
