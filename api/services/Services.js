@@ -17,8 +17,12 @@ class Services {
 
     }
 
-    async atualizaUmRegistro(dadosAtualizados, id) {
+    async atualizaUmRegistro(dadosAtualizados, id, transacao = {}) {
+        return dataBase[this.nomeModelo].update(dadosAtualizados, { where: { id: id } }, transacao)
+    }
 
+    async atualizaRegistros(dadosAtualizados, where, transacao = {}) {
+        return dataBase[this.nomeModelo].update(dadosAtualizados, { where: { ...where } }, transacao)
     }
 
     async deletaUmRegistro(id) {

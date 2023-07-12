@@ -1,11 +1,11 @@
 const Services = require("./Services");
 
-class TurmasServices extends Services {
+class MatriculasServices extends Services {
     constructor() {
-        super("Turmas");
+        super("Matriculas");
     };
 
     // metodos especificos de pessoas
 }
 
-module.exports = TurmasServices;
+module.exports = MatriculasServices;
