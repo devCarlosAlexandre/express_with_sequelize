@@ -5,16 +5,16 @@ class Services {
         this.nomeModelo = nomeModelo;
     }
 
-    async pegaTodosRegistros() {
-        return dataBase[this.nomeModelo].findAll();
+    async pegaTodosRegistros(where = {}) {
+        return dataBase[this.nomeModelo].findAll({ where: { ...where } });
     }
 
-    async pegaUmRegistro(id) {
-
+    async pegaUmRegistro(where = {}) {
+        return dataBase[this.nomeModelo].findOne({ where: { ...where } });
     }
 
     async criaUmRegistro(dados) {
-
+        return dataBase[this.nomeModelo].create(dados);
     }
 
     async atualizaUmRegistro(dadosAtualizados, id, transacao = {}) {
@@ -26,7 +26,19 @@ class Services {
     }
 
     async deletaUmRegistro(id) {
+        return dataBase[this.nomeModelo].destroy({ where: { id: id } });
+    }
 
+    async restauraRegistro(id) {
+        return dataBase[this.nomeModelo].restore({ where: { id: id } });
+    }
+
+    async pegaRegistroApagado(id) {
+        return dataBase[this.nomeModelo].findOne({ paranoid: true, where: { id: id } });
+    }
+
+    async encontraEContaRegistro(where = {}, agregadores) {
+        return dataBase[this.nomeModelo].findAndCountAll({ where: { ...where }, ...agregadores });
     }
 }
 
